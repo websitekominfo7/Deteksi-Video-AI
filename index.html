@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TruthLens AI Video Checker</title>
+    <style>
+        body {font-family: Arial; text-align: center; padding-top: 50px; background: #f3f6fc; }
+        .upload-area { border: 2px dashed #007bff; padding: 30px; margin: 20px auto; width: 50%; background: #eef5ff; border-radius: 10px; }
+        button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; }
+        .result { font-size: 20px; margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <h1>🎥 TruthLens</h1>
+    <p>Upload a video to check for manipulative content indicators.</p>
+
+    <form id="uploadForm">
+        <div class="upload-area" onclick="document.getElementById('videoFile').click()">
+            <p>Click here to upload a video file</p>
+            <input type="file" id="videoFile" name="video" accept="video/*" style="display:none">
+        </div>
+        <button type="submit">Analyze</button>
+    </form>
+
+    <div class="result" id="result"></div>
+
+    <script>
+        const form = document.getElementById('uploadForm');
+        const resultDiv = document.getElementById('result');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData();
+            const videoFile = document.getElementById('videoFile').files[0];
+            if (!videoFile) {
+                alert("Please select a video file first!");
+                return;
+            }
+            formData.append('video', videoFile);
+            resultDiv.innerHTML = "Analyzing... Please wait ⏳";
+
+            const response = await fetch('/upload', { method: 'POST', body: formData });
+            const data = await response.json();
+
+            resultDiv.innerHTML = `Manipulative Level: <b>${data.score}%</b>`;
+        });
+    </script>
+</body>
+</html>
