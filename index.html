@@ -1,49 +1,112 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>TruthLens AI Video Checker</title>
+    <title>Lensa Cerdas - Melihat Kebenaran Dibalik Setiap Konten</title>
+
+    <!-- ✅ STYLE AWALMU TIDAK DIUBAH -->
     <style>
-        body {font-family: Arial; text-align: center; padding-top: 50px; background: #f3f6fc; }
-        .upload-area { border: 2px dashed #007bff; padding: 30px; margin: 20px auto; width: 50%; background: #eef5ff; border-radius: 10px; }
-        button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; }
-        .result { font-size: 20px; margin-top: 30px; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f9fc;
+            text-align: center;
+            
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+        }
+
+        header img {
+            width: 70px;
+            height: 70px;
+            margin-right: 20px;
+        }
+
+        header h1 {
+            font-size: 35px;
+            color: #000;
+            margin: 50;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .upload-box {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            width: 320px;
+            margin: auto;
+        }
+
+        .upload-box input[type="file"],
+        .upload-box input[type="url"] {
+            display: block;
+            width: 90%;
+            margin: 10px auto;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .upload-box button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .upload-box button:hover {
+            background-color: #0056b3;
+        }
+
+        .divider {
+            margin: 10px 0;
+            font-weight: bold;
+            color: #777;
+        }
     </style>
 </head>
+
 <body>
-    <h1>🎥 TruthLens</h1>
-    <p>Upload a video to check for manipulative content indicators.</p>
+    <!-- ✅ HEADER ASLI (TIDAK DIUBAH SEDIKITPUN) -->
+    <header>
+        <img src="{{ url_for('static', filename='coba-1.jpg') }}" alt="Logo">
+        <h1>Lensa Cerdas - Melihat Kebenaran Dibalik Setiap Konten</h1>
+    </header>
 
-    <form id="uploadForm">
-        <div class="upload-area" onclick="document.getElementById('videoFile').click()">
-            <p>Click here to upload a video file</p>
-            <input type="file" id="videoFile" name="video" accept="video/*" style="display:none">
+    <div class="container">
+        <h2>Paste an Video or URL Here</h2>
+
+        <div class="upload-box">
+            <!-- ✅ FORM UPLOAD DAN PASTE URL -->
+            <form action="/analyze" method="post" enctype="multipart/form-data">
+                <!-- Upload file video -->
+                <input type="file" name="video" accept="video/*">
+
+                <div class="divider">— or —</div>
+
+                <!-- Paste URL video dari sosial media -->
+                <input type="url" name="video_url" placeholder="Paste video URL here">
+
+                <button type="submit">Upload & Analysis</button>
+            </form>
         </div>
-        <button type="submit">Analyze</button>
-    </form>
-
-    <div class="result" id="result"></div>
-
-    <script>
-        const form = document.getElementById('uploadForm');
-        const resultDiv = document.getElementById('result');
-
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = new FormData();
-            const videoFile = document.getElementById('videoFile').files[0];
-            if (!videoFile) {
-                alert("Please select a video file first!");
-                return;
-            }
-            formData.append('video', videoFile);
-            resultDiv.innerHTML = "Analyzing... Please wait ⏳";
-
-            const response = await fetch('/upload', { method: 'POST', body: formData });
-            const data = await response.json();
-
-            resultDiv.innerHTML = `Manipulative Level: <b>${data.score}%</b>`;
-        });
-    </script>
+    </div>
 </body>
 </html>
